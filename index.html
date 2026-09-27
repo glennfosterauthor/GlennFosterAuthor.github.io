@@ -407,7 +407,14 @@ body.sm-open{overflow:hidden}
 
 footer{border-top:1px solid var(--line);padding:40px var(--gut) 34px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;color:var(--dim)}
 footer .brand{color:var(--txt)}
-footer nav{display:flex;gap:26px;justify-content:center}
+footer nav{display:flex;gap:26px;justify-content:center;align-items:baseline}
+.ft-soon{color:var(--faint);cursor:default}
+.ft-soon i{font-style:normal;color:#39414a}
+.wh-sender b{font-family:var(--mono);font-weight:500;font-size:.92em;letter-spacing:.02em}
+.wh-done:empty,.cta .done:empty{display:none}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+.wh-sender{font-size:12.5px;color:#6b6556;margin:16px 0 0;line-height:1.5}
+.wh-sender b{color:var(--paper-ink)}
 footer nav a{text-decoration:none}
 footer nav a:hover{color:var(--gold)}
 footer .r{text-align:right}
@@ -698,13 +705,15 @@ footer .r{text-align:right}
         <div class="notify-box" id="wh-notify">
           <p class="notify-how"><b>Want to know the day it lands?</b> Tap <em>Notify me</em>, enter your email, and you’ll get one message when <em>In the Warm Hour</em> is out in paperback, plus another when the Kindle edition follows.</p>
           <button class="btn dark" type="button" id="whBtn" aria-expanded="false" aria-controls="whForm">Notify me <span class="arr">→</span></button>
-          <!-- Connected through the LISTMONK block in the script near the end of this file. -->
+          <!-- Connected through the WEB3FORMS_KEY line in the script near the end of this file. -->
           <form class="wh-form" id="whForm" action="#" method="post" hidden>
             <label for="whEmail" class="sr">Email address</label>
             <input id="whEmail" name="email" type="email" required placeholder="your@email.com" autocomplete="email">
+            <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
             <button class="btn dark" type="submit">Send <span class="arr">→</span></button>
           </form>
           <p class="wh-done mono" id="whDone" aria-live="polite"></p>
+          <p class="wh-sender">The release note comes from <b>noreply@glennfosterauthor.com</b>. Add it to your contacts so it reaches your inbox.</p>
         </div>
       </div>
     </article>
@@ -717,10 +726,11 @@ footer .r{text-align:right}
   <div class="mono rv">§ 07 — Transmission</div>
   <h2 class="rv">Don’t lose <em>that signal.</em></h2>
   <p class="lede rv">Get release news for <em>In the Warm Hour</em>, notes from the workshop and first looks at new covers, only when there’s something worth receiving.</p>
-  <!-- Connected through the LISTMONK block in the script near the end of this file. -->
+  <!-- Connected through the WEB3FORMS_KEY line in the script near the end of this file. -->
   <form class="signup rv" id="signup" action="#" method="post">
     <label for="em" class="sr">Email address</label>
     <input id="em" name="email" type="email" required placeholder="your@email.com" autocomplete="email">
+    <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
     <button class="btn" type="submit">Subscribe here <span class="arr">→</span></button>
   </form>
   <p class="done mono" id="done" aria-live="polite"></p>
@@ -732,8 +742,6 @@ footer .r{text-align:right}
   <p class="yt-note rv">On YouTube I talk about writing from the life you already lived — including service — not about formulas.</p>
 </section>
 </main>
-
-<iframe name="lm-sink" id="lmSink" title="Newsletter sign-up" hidden></iframe>
 
 <!-- ==================== SHARE POP-UP ==================== -->
 <div class="share-modal" id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareTitle" hidden>
@@ -754,7 +762,7 @@ footer .r{text-align:right}
 
 <footer>
   <a class="brand" href="#top">Glenn Foster</a>
-  <nav class="mono" aria-label="Footer"><a href="#library">Books</a><a href="https://www.youtube.com/@Glenn_Foster_Author" target="_blank" rel="noopener">YouTube</a><a href="#" data-todo="Contact email">Contact</a></nav>
+  <nav class="mono" aria-label="Footer"><a href="#library">Books</a><a href="https://www.youtube.com/@Glenn_Foster_Author" target="_blank" rel="noopener">YouTube</a><span class="ft-soon" aria-label="Reader contact opening soon">Contact <i>· opening soon</i></span></nav>
   <div class="r mono">© <span id="yr">2026</span> Glenn Foster</div>
 </footer>
 
@@ -1001,40 +1009,34 @@ copyBtn.addEventListener('click',()=>{
   function legacy(){urlBox.focus();urlBox.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}done(ok)}
 });
 
-/* ============ NEWSLETTER SIGN-UPS (listmonk) ============
-   Fill these in once your listmonk server is running:
-     url         the address of your listmonk install, e.g. 'https://glennfoster.pikapod.net'
-     newsletter  the UUID of your main "Newsletter" list
-     warmHour    the UUID of your "In the Warm Hour: Notify" list
-   (Lists > click a list > its UUID is shown on the list's page.)
-   Until all three are filled in, both forms say honestly that sign-ups aren't open yet. */
-const LISTMONK = {
-  url:        '',
-  newsletter: '',
-  warmHour:   ''
-};
-function wireForm(form, lists, out, okMsg){
-  const ready = LISTMONK.url && lists.every(Boolean);
-  if(!ready){
-    form.addEventListener('submit',e=>{e.preventDefault();
-      out.textContent='Sign-ups open soon. Your address was not saved yet, so please check back.';});
-    return;
-  }
-  form.action = LISTMONK.url.replace(/\/+$/,'') + '/subscription/form';
-  form.method = 'post';
-  form.target = 'lm-sink';
-  const add=(n,v)=>{const i=document.createElement('input');i.type='hidden';i.name=n;i.value=v;form.appendChild(i)};
-  add('nonce','');                    // listmonk's anti-spam field; must stay empty
-  lists.forEach(uuid=>add('l',uuid)); // which list(s) this form joins
-  form.addEventListener('submit',()=>{
-    const sink=$('#lmSink');
-    sink.addEventListener('load',()=>{out.textContent=okMsg;form.reset();if(form===whForm)whForm.hidden=true},{once:true});
+/* ============ NEWSLETTER SIGN-UPS (Web3Forms → your inbox) ============
+   Each sign-up is emailed to you. To switch this on:
+     1. Go to web3forms.com, type in the email address that should receive sign-ups,
+        and they'll email you an Access Key.
+     2. Paste that key between the quotes below and upload this file to GitHub.
+   Until a key is in place, the forms send nothing. */
+const WEB3FORMS_KEY = '46bc95ce-869f-48f6-a0ad-c95e0393f04b';
+const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
+function wireForm(form, list, out, okMsg){
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    if(!WEB3FORMS_KEY) return;                        // not connected yet: nothing is sent
+    const email=form.querySelector('input[type=email]').value.trim();
+    const btn=form.querySelector('button[type=submit]'); btn.disabled=true;
     out.textContent='Sending…';
+    try{
+      const r=await fetch(WEB3FORMS_URL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+        body:JSON.stringify({access_key:WEB3FORMS_KEY, subject:'New sign-up: '+list, from_name:'glennfosterauthor.com',
+          email, list, signed_up:new Date().toISOString(), botcheck:form.querySelector('.hp').checked})});
+      const j=await r.json();
+      if(j.success){ out.textContent=okMsg; form.reset(); if(form===whForm) whForm.hidden=true; }
+      else throw new Error(j.message||'failed');
+    }catch(err){ out.textContent='Something went wrong. Please try again in a moment.'; }
+    btn.disabled=false;
   });
 }
-// Main form joins the newsletter; the Warm Hour form joins both lists.
-wireForm($('#signup'), [LISTMONK.newsletter], $('#done'), 'Almost there. Check your inbox and click the confirmation link.');
-wireForm(whForm, [LISTMONK.warmHour, LISTMONK.newsletter], $('#whDone'), 'Almost there. Check your inbox and click the confirmation link.');
+wireForm($('#signup'), 'Newsletter', $('#done'), 'You’re on the list. Thank you.');
+wireForm(whForm, 'In the Warm Hour release', $('#whDone'), 'You’re on the list. We’ll write on release day.');
 
 /* ============ subtle magnetic buttons ============ */
 if(!RM && matchMedia('(hover:hover)').matches){$$('.btn').forEach(b=>{
