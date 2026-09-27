@@ -6,20 +6,20 @@
 <title>Glenn Foster — Author</title>
 <meta name="description" content="Glenn Foster, author of The Luminary Sword (dark Celtic fantasy), Aether's Reach (hard science fiction) and In the Warm Hour (literary science fiction, January 2027).">
 <meta name="theme-color" content="#07090c">
-<!-- SITE ADDRESS — if you move to your own domain later, replace every https://glennfosterauthor.github.io/ below
+<!-- SITE ADDRESS — if you move to your own domain later, replace every https://glennfosterauthor.com/ below
      and the SITE_URL line in the script near the end of this file. -->
-<link rel="canonical" href="https://glennfosterauthor.github.io/">
+<link rel="canonical" href="https://glennfosterauthor.com/">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://glennfosterauthor.github.io/">
+<meta property="og:url" content="https://glennfosterauthor.com/">
 <meta property="og:site_name" content="Glenn Foster">
 <meta property="og:title" content="Glenn Foster — Author">
 <meta property="og:description" content="Three novels by Glenn Foster: dark Celtic fantasy, hard science fiction, and literary science fiction.">
-<meta property="og:image" content="https://glennfosterauthor.github.io/og-image.jpg">
+<meta property="og:image" content="https://glennfosterauthor.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The covers of The Luminary Sword, Aether's Reach and In the Warm Hour by Glenn Foster">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://glennfosterauthor.github.io/og-image.jpg">
+<meta name="twitter:image" content="https://glennfosterauthor.com/og-image.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2307090c'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23D4BC70'%3EGF%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -428,7 +428,7 @@ footer .r{text-align:right}
     <li><a href="#voices">Voices</a></li>
     <li><a href="#log">Mission Log</a></li>
     <li><a href="#library">Library</a></li>
-    <li><a href="#signal">Signal</a></li>
+    <li><a href="#signal">Newsletter</a></li>
   </ul></nav>
 </header>
 
@@ -698,11 +698,10 @@ footer .r{text-align:right}
         <div class="notify-box" id="wh-notify">
           <p class="notify-how"><b>Want to know the day it lands?</b> Tap <em>Notify me</em>, enter your email, and you’ll get one message when <em>In the Warm Hour</em> is out in paperback, plus another when the Kindle edition follows.</p>
           <button class="btn dark" type="button" id="whBtn" aria-expanded="false" aria-controls="whForm">Notify me <span class="arr">→</span></button>
-          <!-- TODO: set action to your mailing-list provider (same as the main sign-up form) -->
+          <!-- Connected through the LISTMONK block in the script near the end of this file. -->
           <form class="wh-form" id="whForm" action="#" method="post" hidden>
             <label for="whEmail" class="sr">Email address</label>
             <input id="whEmail" name="email" type="email" required placeholder="your@email.com" autocomplete="email">
-            <input type="hidden" name="tag" value="in-the-warm-hour">
             <button class="btn dark" type="submit">Send <span class="arr">→</span></button>
           </form>
           <p class="wh-done mono" id="whDone" aria-live="polite"></p>
@@ -718,7 +717,7 @@ footer .r{text-align:right}
   <div class="mono rv">§ 07 — Transmission</div>
   <h2 class="rv">Don’t lose <em>that signal.</em></h2>
   <p class="lede rv">Get release news for <em>In the Warm Hour</em>, notes from the workshop and first looks at new covers, only when there’s something worth receiving.</p>
-  <!-- TODO: set action to your mailing-list provider (Buttondown, MailerLite, ConvertKit, etc.) -->
+  <!-- Connected through the LISTMONK block in the script near the end of this file. -->
   <form class="signup rv" id="signup" action="#" method="post">
     <label for="em" class="sr">Email address</label>
     <input id="em" name="email" type="email" required placeholder="your@email.com" autocomplete="email">
@@ -733,6 +732,8 @@ footer .r{text-align:right}
   <p class="yt-note rv">On YouTube I talk about writing from the life you already lived — including service — not about formulas.</p>
 </section>
 </main>
+
+<iframe name="lm-sink" id="lmSink" title="Newsletter sign-up" hidden></iframe>
 
 <!-- ==================== SHARE POP-UP ==================== -->
 <div class="share-modal" id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareTitle" hidden>
@@ -967,12 +968,11 @@ const whBtn=$('#whBtn'), whForm=$('#whForm');
 function openWh(){whForm.hidden=false;whBtn.hidden=true;whBtn.setAttribute('aria-expanded','true');$('#whEmail').focus({preventScroll:true})}
 whBtn.addEventListener('click',openWh);
 $$('[data-notify]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();$('#wh-notify').scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});openWh()}));
-whForm.addEventListener('submit',e=>{if(whForm.getAttribute('action')==='#'){e.preventDefault();$('#whDone').textContent='You’re on the list. We’ll write on release day.';whForm.reset();whForm.hidden=true}});
 
 /* ============ SHARE POP-UP (address + QR code) ============ */
 const shareBtn=$('#shareBtn'), modal=$('#shareModal'), urlBox=$('#shareUrl'), copyBtn=$('#shareCopy');
 let lastFocus=null;
-const SITE_URL='https://glennfosterauthor.github.io/';   // the public address shared in the pop-up and QR code
+const SITE_URL='https://glennfosterauthor.com/';   // the public address shared in the pop-up and QR code
 function siteUrl(){return SITE_URL}   // always the address the page is served from
 function drawQR(text){
   const q=qrcode(0,'M'); q.addData(text); q.make();
@@ -1001,8 +1001,40 @@ copyBtn.addEventListener('click',()=>{
   function legacy(){urlBox.focus();urlBox.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}done(ok)}
 });
 
-/* ============ SIGNUP (placeholder until a provider is wired) ============ */
-$('#signup').addEventListener('submit',e=>{const f=e.target;if(f.getAttribute('action')==='#'){e.preventDefault();$('#done').textContent='Channel open. Signal received.';f.reset()}});
+/* ============ NEWSLETTER SIGN-UPS (listmonk) ============
+   Fill these in once your listmonk server is running:
+     url         the address of your listmonk install, e.g. 'https://glennfoster.pikapod.net'
+     newsletter  the UUID of your main "Newsletter" list
+     warmHour    the UUID of your "In the Warm Hour: Notify" list
+   (Lists > click a list > its UUID is shown on the list's page.)
+   Until all three are filled in, both forms say honestly that sign-ups aren't open yet. */
+const LISTMONK = {
+  url:        '',
+  newsletter: '',
+  warmHour:   ''
+};
+function wireForm(form, lists, out, okMsg){
+  const ready = LISTMONK.url && lists.every(Boolean);
+  if(!ready){
+    form.addEventListener('submit',e=>{e.preventDefault();
+      out.textContent='Sign-ups open soon. Your address was not saved yet, so please check back.';});
+    return;
+  }
+  form.action = LISTMONK.url.replace(/\/+$/,'') + '/subscription/form';
+  form.method = 'post';
+  form.target = 'lm-sink';
+  const add=(n,v)=>{const i=document.createElement('input');i.type='hidden';i.name=n;i.value=v;form.appendChild(i)};
+  add('nonce','');                    // listmonk's anti-spam field; must stay empty
+  lists.forEach(uuid=>add('l',uuid)); // which list(s) this form joins
+  form.addEventListener('submit',()=>{
+    const sink=$('#lmSink');
+    sink.addEventListener('load',()=>{out.textContent=okMsg;form.reset();if(form===whForm)whForm.hidden=true},{once:true});
+    out.textContent='Sending…';
+  });
+}
+// Main form joins the newsletter; the Warm Hour form joins both lists.
+wireForm($('#signup'), [LISTMONK.newsletter], $('#done'), 'Almost there. Check your inbox and click the confirmation link.');
+wireForm(whForm, [LISTMONK.warmHour, LISTMONK.newsletter], $('#whDone'), 'Almost there. Check your inbox and click the confirmation link.');
 
 /* ============ subtle magnetic buttons ============ */
 if(!RM && matchMedia('(hover:hover)').matches){$$('.btn').forEach(b=>{
