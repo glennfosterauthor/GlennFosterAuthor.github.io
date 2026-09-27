@@ -412,6 +412,8 @@ footer nav{display:flex;gap:26px;justify-content:center;align-items:baseline}
 .ft-soon i{font-style:normal;color:#39414a}
 .wh-sender b{font-family:var(--mono);font-weight:500;font-size:.92em;letter-spacing:.02em}
 .wh-done:empty,.cta .done:empty{display:none}
+.cta .privacy-note{text-align:center;max-width:48ch;margin:16px auto 0;font-size:13.5px;line-height:1.55;color:var(--dim);position:relative}
+.cta .privacy-note::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:9px;vertical-align:.12em;opacity:.8}
 .hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
 .wh-sender{font-size:12.5px;color:#6b6556;margin:16px 0 0;line-height:1.5}
 .wh-sender b{color:var(--paper-ink)}
@@ -734,6 +736,7 @@ footer .r{text-align:right}
     <button class="btn" type="submit">Subscribe here <span class="arr">→</span></button>
   </form>
   <p class="done mono" id="done" aria-live="polite"></p>
+  <p class="privacy-note rv">Your email stays with me. I will never sell, rent or trade it, and you can unsubscribe at any time.</p>
   <div class="alt rv">
     <a class="btn ghost" href="https://www.amazon.com/stores/author/B0H2SBXBMV" target="_blank" rel="noopener">Amazon author page <span class="arr">→</span></a>
     <a class="btn ghost" href="https://www.youtube.com/@Glenn_Foster_Author" target="_blank" rel="noopener">Watch me on YouTube <span class="arr">→</span></a>
