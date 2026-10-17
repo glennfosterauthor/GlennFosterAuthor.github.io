@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <link rel="canonical" href="https://glennfosterauthor.com/" />
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Glenn Foster — Author</title>
@@ -661,7 +660,7 @@ footer .ft-note{grid-column:1/-1;margin:6px 0 0;font-size:15px;line-height:1.6;f
         <div class="row"><span>&gt; SYSTEM</span><b>R.C. // DISTRIBUTED QUANTUM</b></div>
         <div class="row"><span>&gt; RETRY</span><b>2 / 2</b></div>
         <div class="nr">No Current Results</div>
-        <div class="note">— which was not an answer.</div>
+        <div class="note">—which was not an answer.</div>
       </div>
     </div>
   </div>
@@ -1001,12 +1000,45 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
    ============================================================ */
 const AMAZON = {
   luminary: 'https://www.amazon.com/dp/B0GQJTXZS3',   // The Luminary Sword (paperback page)
-  aether:   'https://www.amazon.com/dp/B0H4DHBT6Q'     // Aether's Reach (Kindle page)
+  aether:   'https://www.amazon.com/dp/B0H4DHBT6Q',    // Aether's Reach (Kindle page)
+  warmhour: ''                                         // In the Warm Hour: paste its Amazon link here when it exists
 };
 document.querySelectorAll('[data-amazon]').forEach(a=>{
   const url=AMAZON[a.dataset.amazon];
   if(url){a.href=url}else{a.removeAttribute('target');a.title='Amazon link coming soon'}
 });
+
+/* ============ IN THE WARM HOUR — automatic launch day ============
+   From WH_RELEASE onward (each visitor's own local date) the card switches itself
+   to "Out now": ribbon, status and formats update, "Notify me" gives way to a
+   Buy on Amazon button, and the cover links to Amazon.
+     • Buy links use AMAZON.warmhour above; while that is empty they go to the
+       Amazon author page, so the button never leads nowhere.
+     • Add ?whlaunch to the address to preview launch day on any date.
+   ============================================================ */
+const WH_RELEASE='2027-01-08';
+const AUTHOR_PAGE='https://www.amazon.com/stores/author/B0H2SBXBMV';
+(()=>{
+  const d=new Date(), today=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  if(today<WH_RELEASE && !/[?&]whlaunch\b/.test(location.search)) return;
+  const card=document.querySelector('.book.wh'); if(!card) return;
+  const url=AMAZON.warmhour||AUTHOR_PAGE;
+  const amazonIcon='<svg class="ico" aria-hidden="true"><use href="#i-amazon"/></svg>';
+  document.documentElement.classList.add('wh-launched');
+  const ribbon=card.querySelector('.soon'); if(ribbon) ribbon.textContent='Out now';
+  const status=card.querySelector('.status'); if(status){status.classList.remove('pre');status.textContent='Available'}
+  card.querySelectorAll('.fmts li').forEach(li=>{const [k,v]=li.children;
+    if(k.textContent==='Release') v.textContent='Out now';
+    if(k.textContent==='Paperback') v.textContent='Available';});
+  const cover=card.querySelector('.cover');
+  cover.removeAttribute('data-notify'); cover.href=url; cover.target='_blank'; cover.rel='noopener';
+  cover.setAttribute('aria-label','In the Warm Hour on Amazon');
+  const chip=cover.querySelector('.buy'); if(chip) chip.innerHTML='<span class="bl">'+amazonIcon+'View on Amazon</span> <i>↗</i>';
+  const box=card.querySelector('#wh-notify'); if(box) box.hidden=true;
+  const buy=document.createElement('a'); buy.className='btn dark'; buy.href=url; buy.target='_blank'; buy.rel='noopener';
+  buy.innerHTML=amazonIcon+'Buy on Amazon <span class="arr">↗</span>';
+  if(box) box.after(buy); else card.querySelector('.binfo').appendChild(buy);
+})();
 
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = (s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
@@ -1129,7 +1161,7 @@ const hero=$('#hero'), frames=$$('.frame'), ticks=$$('.progress i'), hudT=$('#hu
 let cur=-1;
 function onScroll(){
   const r=hero.getBoundingClientRect(), total=hero.offsetHeight-innerHeight;
-  prog=Math.max(0,Math.min(1,-r.top/total));
+  prog=total>0?Math.max(0,Math.min(1,-r.top/total)):0;   // guard: a zero-height window would otherwise divide by zero
   const idx=Math.min(4,Math.floor(prog*5.2));
   if(idx!==cur){cur=idx;frames.forEach((f,i)=>f.classList.toggle('on',i===idx));ticks.forEach((t,i)=>t.classList.toggle('on',i<=idx))}
   hudT.textContent='T-'+Math.round(365-prog*12)+' days';
