@@ -72,10 +72,13 @@ body::after{content:"";position:fixed;inset:-50%;z-index:90;pointer-events:none;
 @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-1%,3%)}100%{transform:translate(0,0)}}
 
 /* ---------- nav ---------- */
-.nav{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;padding:22px var(--gut);transition:transform .6s var(--ease),color .4s;mix-blend-mode:difference;color:#f2efe8}
+.nav{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;padding:22px var(--gut);transition:transform .6s var(--ease),color .4s,background .4s,padding .4s;mix-blend-mode:difference;color:#f2efe8}
 .nav.hide{transform:translateY(-110%)}
+.nav.solid{mix-blend-mode:normal;background:rgba(7,9,12,.93);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding-top:14px;padding-bottom:14px;box-shadow:0 1px 0 rgba(200,238,242,.08)}
 .brand{font-family:var(--serif);font-size:22px;letter-spacing:.01em;text-decoration:none}
 .brand i{font-style:italic;opacity:.7}
+h1,h2,h3,.yt-thanks,.yt-vet,.tr-head,.tr-sub,.cta .lede{text-wrap:balance}
+p{text-wrap:pretty}
 .nav ul{display:flex;gap:34px;list-style:none;margin:0;padding:0}
 .nav ul a{text-decoration:none;position:relative}
 .nav ul a::after{content:"";position:absolute;left:0;bottom:-4px;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
@@ -410,6 +413,7 @@ body.sm-open{overflow:hidden}
 .cta .yt-note{text-align:center;max-width:46ch;margin:28px auto 0;font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,1.6vw,1.35rem);line-height:1.4;color:var(--mist);position:relative}
 .cta .yt-row{display:flex;align-items:center;justify-content:center;gap:clamp(56px,6vw,88px);margin:clamp(56px,6vw,84px) auto 0;max-width:1240px}
 .cta .yt-row .yt-note{margin:0;max-width:64ch;flex:1 1 auto}
+@media (min-width:981px){.cta .yt-row .yt-note{text-align:left}}
 .cta .yt-flag{flex:none;width:clamp(200px,26vw,320px);height:auto;border-radius:2px;box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
 .cta .yt-badge{flex:none;display:flex;flex-direction:column;align-items:center;gap:22px;width:clamp(220px,24vw,300px)}
 .cta .yt-badge .yt-flag{width:100%}
@@ -719,7 +723,7 @@ footer .ft-note{grid-column:1/-1;margin:6px 0 0;font-size:15px;line-height:1.6;f
         <p>Book One of The Nemesis Project. An engineer, a father, a general and a fifteen-year-old face a sabotaged launch and a signal that has been waiting for decades.</p>
         <ul class="fmts"><li><span>Paperback</span><span>Available</span></li><li><span>Kindle eBook</span><span>Available</span></li><li><span>Series</span><span>The Nemesis Project - Book One</span></li></ul>
         <a class="btn" data-amazon="aether" href="#library" target="_blank" rel="noopener">Begin the mission <span class="arr">↗</span></a>
-        <div class="sample-dl"><a class="btn outline" href="Aethers_Reach_sample/Aether%27s%20Reach%20preview.pdf" download="Aethers-Reach-preview.pdf" type="application/pdf">Download a free preview <span class="arr">↓</span></a></div>
+        <div class="sample-dl"><a class="btn outline" href="Aethers_Reach_sample/Aether%27s%20Reach%20preview.pdf" download="Aether's Reach preview.pdf" type="application/pdf">Download a free preview <span class="arr">↓</span></a></div>
       </div>
     </article>
 
@@ -959,7 +963,7 @@ function onScroll(){
   hudT.textContent='T-'+Math.round(365-prog*12)+' days';
   const w=prog>.78; hudS.classList.toggle('warn',w); hudS.querySelector('b').textContent=w?'nominal (?)':'nominal';
   // nav hide on scroll down
-  const y=scrollY; nav.classList.toggle('hide', y>lastY && y>innerHeight*.6); lastY=y;
+  const y=scrollY; nav.classList.toggle('hide', y>lastY && y>innerHeight*.6); nav.classList.toggle('solid', y>innerHeight*.6); lastY=y;
 }
 const nav=$('#nav'); let lastY=0;
 addEventListener('scroll',onScroll,{passive:true}); onScroll();
