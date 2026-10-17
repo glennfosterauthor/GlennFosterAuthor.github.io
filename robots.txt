@@ -1,0 +1,5 @@
+# glennfosterauthor.com: search engines are welcome to read the whole site.
+User-agent: *
+Allow: /
+
+Sitemap: https://glennfosterauthor.com/sitemap.xml
